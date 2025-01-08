@@ -1,7 +1,11 @@
 package com.checkinn.checkinn.Entities;
 
 import jakarta.persistence.*;
+import lombok.*;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
