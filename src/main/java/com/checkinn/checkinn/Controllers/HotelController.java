@@ -52,7 +52,7 @@ public class HotelController {
     }
 
     @PatchMapping("/edit/{hotel_id}")
-    public ResponseEntity<Hotel> editHotel(@RequestHeader (AUTH_HEADER_NAME) String token, @PathVariable int hotel_id, @RequestBody Hotel hotel) {
+    public ResponseEntity<String> editHotel(@RequestHeader (AUTH_HEADER_NAME) String token, @PathVariable int hotel_id, @RequestBody Hotel hotel) {
         return null;
     }
 

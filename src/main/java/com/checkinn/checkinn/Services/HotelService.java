@@ -3,7 +3,9 @@ package com.checkinn.checkinn.Services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.checkinn.checkinn.Entities.Hotel;
 import com.checkinn.checkinn.Repositories.HotelRepository;
@@ -32,5 +34,9 @@ public class HotelService {
 
     public Iterable<Hotel> getHotelsByLocation(String location) {
         return hotelRepository.findByLocation(location);
+    }
+
+    public String editHotel(int hotel_id, Hotel hotel) {
+        return null;
     }
 }
