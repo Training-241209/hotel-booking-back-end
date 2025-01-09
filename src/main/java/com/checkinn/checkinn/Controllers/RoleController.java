@@ -1,18 +1,18 @@
 package com.checkinn.checkinn.Controllers;
 
-import com.checkinn.checkinn.Services.UserService;
+import com.checkinn.checkinn.Services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/role")
+public class RoleController {
 
-    private UserService userService;
+    private RoleService roleService;
 
     @Autowired
-    public UserController(UserService userService){
-        this.userService = userService;
+    public RoleController(RoleService roleService){
+        this.roleService = roleService;
     }
 }
