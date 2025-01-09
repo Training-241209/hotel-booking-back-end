@@ -1,7 +1,6 @@
 package com.checkinn.checkinn.Controllers;
 
 import com.checkinn.checkinn.DTOs.UserLoginDTO;
-import com.checkinn.checkinn.DTOs.UserResponseDTO;
 import com.checkinn.checkinn.Entities.User;
 import com.checkinn.checkinn.Services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
