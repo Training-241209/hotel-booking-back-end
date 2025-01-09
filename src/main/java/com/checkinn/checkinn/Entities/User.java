@@ -11,7 +11,8 @@ import lombok.*;
 public class User {
 
     @Id
-    @GeneratedValue
+    @SequenceGenerator(name = "user_seq",sequenceName = "user_seq",allocationSize = 1)
+    @GeneratedValue(generator ="user_seq",strategy = GenerationType.SEQUENCE)
     @Column(name = "user_id", unique = true)
     private int userId;
 
