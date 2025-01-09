@@ -25,4 +25,8 @@ public class HotelService {
         }
         return null;
     }
+
+    public Iterable<Hotel> getAllHotels() {
+        return hotelRepository.findAll();
+    }
 }

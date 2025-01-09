@@ -31,4 +31,9 @@ public class HotelController {
         return ResponseEntity.ok().body(hotel);
     }
 
+    @GetMapping("/")
+    public ResponseEntity<Iterable<Hotel>> getAllHotels() {
+        return ResponseEntity.ok().body(hotelService.getAllHotels());
+    }
+
 }
