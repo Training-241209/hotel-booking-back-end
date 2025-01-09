@@ -3,6 +3,7 @@ package com.checkinn.checkinn.Controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,7 +63,7 @@ public class HotelController {
         return ResponseEntity.ok().body(hotelService.createHotel(hotel));
     }
 
-    @PostMapping("/del/{hotel_id}")
+    @DeleteMapping("/del/{hotel_id}")
     public ResponseEntity<String> deleteHotel(@RequestHeader (HttpConstants.AUTH_HEADER_NAME) String token, @PathVariable int hotel_id) {
         authService.isAdminThrowOtherwise(token);
         return ResponseEntity.ok().body(hotelService.deleteHotel(hotel_id));
