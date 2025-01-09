@@ -60,4 +60,12 @@ public class HotelService {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "INVALID HOTEL INFORMATION");
         
     }
+
+    public String deleteHotel(int hotel_id) {
+        if (hotelRepository.existsById(hotel_id)) {
+            hotelRepository.deleteById(hotel_id);
+            return "HOTEL DELETED";
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "HOTEL NOT FOUND");
+    }
 }
