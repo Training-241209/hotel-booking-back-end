@@ -24,7 +24,7 @@ public class HotelController {
 
     private AuthService authService;
 
-    private final String AUTH_HEADER = "authorization";
+    private final String AUTH_HEADER_NAME = "authorization";
     
     @Autowired
     public HotelController(HotelService hotelService, AuthService authService) {
@@ -52,17 +52,17 @@ public class HotelController {
     }
 
     @PatchMapping("/edit/{hotel_id}")
-    public ResponseEntity<Hotel> editHotel(@RequestHeader (AUTH_HEADER) String token, @PathVariable int hotel_id, @RequestBody Hotel hotel) {
+    public ResponseEntity<Hotel> editHotel(@RequestHeader (AUTH_HEADER_NAME) String token, @PathVariable int hotel_id, @RequestBody Hotel hotel) {
         return null;
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Hotel> createHotel(@RequestHeader (AUTH_HEADER) String token, @RequestBody Hotel hotel) {
+    public ResponseEntity<Hotel> createHotel(@RequestHeader (AUTH_HEADER_NAME) String token, @RequestBody Hotel hotel) {
         return null;
     }
 
     @PostMapping("/del/{hotel_id}")
-    public ResponseEntity<Hotel> deleteHotel(@RequestHeader (AUTH_HEADER) String token, @PathVariable int hotel_id) {
+    public ResponseEntity<Hotel> deleteHotel(@RequestHeader (AUTH_HEADER_NAME) String token, @PathVariable int hotel_id) {
         return null;
     }
 
