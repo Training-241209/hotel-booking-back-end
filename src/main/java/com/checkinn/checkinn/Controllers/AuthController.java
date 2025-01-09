@@ -5,14 +5,19 @@ import com.checkinn.checkinn.DTOs.UserResponseDTO;
 import com.checkinn.checkinn.Entities.User;
 import com.checkinn.checkinn.Services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
 
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+
+    public static final String AUTH_HEADER_NAME = "authorization";
 
     private AuthService authService;
 
@@ -40,6 +45,13 @@ public class AuthController {
 
         if (token == null) { return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); }
 
-        return ResponseEntity.ok().header("Authorization", token).body("SUCCESSFUL LOGIN");
+        return ResponseEntity.ok().headers(createHttpAuthHeaders(token)).body("SUCCESSFUL LOGIN");
+    }
+
+    private HttpHeaders createHttpAuthHeaders(String token) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(AUTH_HEADER_NAME, token);
+        httpHeaders.setAccessControlExposeHeaders(Collections.singletonList(AUTH_HEADER_NAME));
+        return httpHeaders;
     }
 }
