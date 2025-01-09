@@ -58,7 +58,6 @@ public class HotelController {
     @PatchMapping("/edit/{hotel_id}")
     public ResponseEntity<String> editHotel(@RequestHeader (AUTH_HEADER_NAME) String token, @PathVariable int hotel_id, @RequestBody Hotel hotel) {
         int user_id = authService.decodeToken(token);
-        System.out.println(userService.getUserById(user_id).getRole().getRoleName());
         if (userService.getUserById(user_id).getRole().getRoleName().equalsIgnoreCase("manager")) {
             return ResponseEntity.ok().body(hotelService.editHotel(hotel_id, hotel));
         }
@@ -66,8 +65,12 @@ public class HotelController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Hotel> createHotel(@RequestHeader (AUTH_HEADER_NAME) String token, @RequestBody Hotel hotel) {
-        return null;
+    public ResponseEntity<String> createHotel(@RequestHeader (AUTH_HEADER_NAME) String token, @RequestBody Hotel hotel) {
+        int user_id = authService.decodeToken(token);
+        if (userService.getUserById(user_id).getRole().getRoleName().equalsIgnoreCase("manager")) {
+            return ResponseEntity.ok().body(hotelService.createHotel(hotel));
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
     }
 
     @PostMapping("/del/{hotel_id}")
