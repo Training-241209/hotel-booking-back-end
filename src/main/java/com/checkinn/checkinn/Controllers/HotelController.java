@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.checkinn.checkinn.Entities.Hotel;
 import com.checkinn.checkinn.Services.AuthService;
 import com.checkinn.checkinn.Services.HotelService;
-import com.checkinn.checkinn.Services.UserService;
 import com.checkinn.checkinn.Constants.HttpConstants;
 
 @RestController
@@ -25,14 +24,11 @@ public class HotelController {
     private HotelService hotelService;
 
     private AuthService authService;
-
-    private UserService userService;
     
     @Autowired
-    public HotelController(HotelService hotelService, AuthService authService, UserService userService) {
+    public HotelController(HotelService hotelService, AuthService authService) {
         this.authService = authService;
         this.hotelService = hotelService;
-        this.userService = userService;
     }
 
     @GetMapping("/{hotel_id}")
@@ -56,25 +52,20 @@ public class HotelController {
 
     @PatchMapping("/edit/{hotel_id}")
     public ResponseEntity<String> editHotel(@RequestHeader (HttpConstants.AUTH_HEADER_NAME) String token, @PathVariable int hotel_id, @RequestBody Hotel hotel) {
-        int user_id = authService.decodeToken(token);
-        if (userService.getUserById(user_id).getRole().getRoleName().equalsIgnoreCase("manager")) {
-            return ResponseEntity.ok().body(hotelService.editHotel(hotel_id, hotel));
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        authService.isAdminThrowOtherwise(token);
+        return ResponseEntity.ok().body(hotelService.editHotel(hotel_id, hotel));
     }
 
     @PostMapping("/create")
     public ResponseEntity<String> createHotel(@RequestHeader (HttpConstants.AUTH_HEADER_NAME) String token, @RequestBody Hotel hotel) {
-        int user_id = authService.decodeToken(token);
-        if (userService.getUserById(user_id).getRole().getRoleName().equalsIgnoreCase("manager")) {
-            return ResponseEntity.ok().body(hotelService.createHotel(hotel));
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
+        authService.isAdminThrowOtherwise(token);
+        return ResponseEntity.ok().body(hotelService.createHotel(hotel));
     }
 
     @PostMapping("/del/{hotel_id}")
-    public ResponseEntity<Hotel> deleteHotel(@RequestHeader (HttpConstants.AUTH_HEADER_NAME) String token, @PathVariable int hotel_id) {
-        return null;
+    public ResponseEntity<String> deleteHotel(@RequestHeader (HttpConstants.AUTH_HEADER_NAME) String token, @PathVariable int hotel_id) {
+        authService.isAdminThrowOtherwise(token);
+        return ResponseEntity.ok().body(hotelService.deleteHotel(hotel_id));
     }
 
 }
