@@ -1,5 +1,6 @@
 package com.checkinn.checkinn.Controllers;
 
+import com.checkinn.checkinn.DTOs.UserLoginDTO;
 import com.checkinn.checkinn.DTOs.UserResponseDTO;
 import com.checkinn.checkinn.Entities.User;
 import com.checkinn.checkinn.Services.AuthService;
@@ -34,7 +35,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
+    public ResponseEntity<String> login(@RequestBody UserLoginDTO user) {
         String token = authService.loginUser(user);
 
         if (token == null) { return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); }
