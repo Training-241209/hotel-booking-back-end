@@ -51,4 +51,13 @@ public class HotelService {
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "HOTEL NOT FOUND");
     }
+
+    public String createHotel(Hotel hotel) {
+        if (hotel.getDescription().length()>0 && hotel.getHotelName().length()>0 && hotel.getLocation().length()>0 && hotel.getPrice()>0 && hotel.getRooms()>0) {
+            hotelRepository.save(hotel);
+            return "HOTEL CREATED";
+        }
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "INVALID HOTEL INFORMATION");
+        
+    }
 }
