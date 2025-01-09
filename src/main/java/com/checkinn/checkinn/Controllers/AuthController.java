@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 
+import static com.checkinn.checkinn.Constants.HttpConstants.AUTH_HEADER_NAME;
+
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-
-    public static final String AUTH_HEADER_NAME = "authorization";
 
     private AuthService authService;
 

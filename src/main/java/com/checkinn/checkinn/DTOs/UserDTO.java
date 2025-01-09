@@ -17,8 +17,12 @@ public class UserDTO {
     private String roleName;
     private boolean isAdmin;
 
-    public UserDTO(int userId) {
+    public UserDTO(int userId, String firstName, String lastName, String email, String roleName) {
         this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.roleName = roleName;
     }
 
     public UserDTO(User user) {
