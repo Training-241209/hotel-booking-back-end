@@ -84,6 +84,23 @@ public class AuthService {
         return claims.get("userId", Integer.class);
     }
 
+    public boolean isAdmin(String token) {
+        int userId = decodeToken(token);
+        User user = userRepository.findById(userId).orElse(null);
+        return (user == null || !user.getRole().isAdmin());
+    }
+
+    public void isAdminThrowOtherwise(String token) {
+        int userId = decodeToken(token);
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+            return new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        });
+
+        if (!user.getRole().isAdmin()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+    }
+
     /**
      * Registers a new user and save them to the database.
      * The user's email must not already be registered.
