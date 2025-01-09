@@ -1,7 +1,6 @@
 package com.checkinn.checkinn.Services;
 
 import com.checkinn.checkinn.DTOs.UserLoginDTO;
-import com.checkinn.checkinn.DTOs.UserDTO;
 import com.checkinn.checkinn.Entities.Role;
 import com.checkinn.checkinn.Entities.User;
 import com.checkinn.checkinn.Repositories.RoleRepository;
@@ -75,14 +74,14 @@ public class AuthService {
      * @param token the JWT token to decode
      * @return a UserDTO containing the user ID
      */
-    public UserDTO decodeToken(String token) {
+    public int decodeToken(String token) {
         var claims = Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
 
-        return new UserDTO(claims.get("userId", Integer.class));
+        return claims.get("userId", Integer.class);
     }
 
     /**
