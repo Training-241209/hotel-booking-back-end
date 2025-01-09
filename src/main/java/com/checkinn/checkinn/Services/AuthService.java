@@ -1,5 +1,6 @@
 package com.checkinn.checkinn.Services;
 
+import com.checkinn.checkinn.DTOs.UserLoginDTO;
 import com.checkinn.checkinn.DTOs.UserResponseDTO;
 import com.checkinn.checkinn.Entities.User;
 import com.checkinn.checkinn.Repositories.UserRepository;
@@ -73,7 +74,7 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    public String loginUser(User user) {
+    public String loginUser(UserLoginDTO user) {
         User foundUser = userRepository.findByEmail(user.getEmail()).
                 orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
