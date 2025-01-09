@@ -3,7 +3,9 @@ package com.checkinn.checkinn.Services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.checkinn.checkinn.Entities.Hotel;
 import com.checkinn.checkinn.Repositories.HotelRepository;
@@ -32,5 +34,38 @@ public class HotelService {
 
     public Iterable<Hotel> getHotelsByLocation(String location) {
         return hotelRepository.findByLocation(location);
+    }
+
+    public String editHotel(int hotel_id, Hotel hotel) {
+        Optional<Hotel> resp = hotelRepository.findById(hotel_id);
+        if (resp.isPresent()) {
+            Hotel hotelToUpdate = resp.get();
+            hotelToUpdate.setHotelName(hotel.getHotelName());
+            hotelToUpdate.setDescription(hotel.getDescription());
+            hotelToUpdate.setRooms(hotel.getRooms());
+            hotelToUpdate.setLocation(hotel.getLocation());
+            hotelToUpdate.setPrice(hotel.getPrice());
+            hotelToUpdate.setImage(hotel.getImage());
+            hotelRepository.save(hotelToUpdate);
+            return "HOTEL UPDATED";
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "HOTEL NOT FOUND");
+    }
+
+    public String createHotel(Hotel hotel) {
+        if (hotel.getDescription().length()>0 && hotel.getHotelName().length()>0 && hotel.getLocation().length()>0 && hotel.getPrice()>0 && hotel.getRooms()>0) {
+            hotelRepository.save(hotel);
+            return "HOTEL CREATED";
+        }
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "INVALID HOTEL INFORMATION");
+        
+    }
+
+    public String deleteHotel(int hotel_id) {
+        if (hotelRepository.existsById(hotel_id)) {
+            hotelRepository.deleteById(hotel_id);
+            return "HOTEL DELETED";
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "HOTEL NOT FOUND");
     }
 }
