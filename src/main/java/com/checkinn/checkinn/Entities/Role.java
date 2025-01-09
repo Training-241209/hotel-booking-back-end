@@ -12,8 +12,7 @@ import lombok.NoArgsConstructor;
 public class Role {
 
     @Id
-    @SequenceGenerator(name = "user_seq",sequenceName = "user_seq",allocationSize = 1)
-    @GeneratedValue(generator ="user_seq",strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id", unique = true)
     private int roleId;
 
