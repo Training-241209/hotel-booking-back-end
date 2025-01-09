@@ -30,9 +30,10 @@ public class HotelController {
     private final String AUTH_HEADER_NAME = "authorization";
     
     @Autowired
-    public HotelController(HotelService hotelService, AuthService authService) {
+    public HotelController(HotelService hotelService, AuthService authService, UserService userService) {
         this.authService = authService;
         this.hotelService = hotelService;
+        this.userService = userService;
     }
 
     @GetMapping("/{hotel_id}")
@@ -57,6 +58,7 @@ public class HotelController {
     @PatchMapping("/edit/{hotel_id}")
     public ResponseEntity<String> editHotel(@RequestHeader (AUTH_HEADER_NAME) String token, @PathVariable int hotel_id, @RequestBody Hotel hotel) {
         int user_id = authService.decodeToken(token);
+        System.out.println(userService.getUserById(user_id).getRole().getRoleName());
         if (userService.getUserById(user_id).getRole().getRoleName().equalsIgnoreCase("manager")) {
             return ResponseEntity.ok().body(hotelService.editHotel(hotel_id, hotel));
         }
