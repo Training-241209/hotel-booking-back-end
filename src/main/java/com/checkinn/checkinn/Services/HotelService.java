@@ -40,6 +40,13 @@ public class HotelService {
         Optional<Hotel> resp = hotelRepository.findById(hotel_id);
         if (resp.isPresent()) {
             Hotel hotelToUpdate = resp.get();
+            hotelToUpdate.setHotelName(hotel.getHotelName());
+            hotelToUpdate.setDescription(hotel.getDescription());
+            hotelToUpdate.setRooms(hotel.getRooms());
+            hotelToUpdate.setLocation(hotel.getLocation());
+            hotelToUpdate.setPrice(hotel.getPrice());
+            hotelToUpdate.setImage(hotel.getImage());
+            hotelRepository.save(hotelToUpdate);
             return "HOTEL UPDATED";
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "HOTEL NOT FOUND");

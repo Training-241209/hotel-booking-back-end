@@ -60,7 +60,7 @@ public class HotelController {
         if (userService.getUserById(user_id).getRole().getRole_name().equalsIgnoreCase("manager")) {
             return ResponseEntity.ok().body(hotelService.editHotel(hotel_id, hotel));
         }
-        return null;
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
     }
 
     @PostMapping("/create")
