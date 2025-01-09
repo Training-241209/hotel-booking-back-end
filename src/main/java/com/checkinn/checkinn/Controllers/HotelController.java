@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.checkinn.checkinn.Entities.Hotel;
 import com.checkinn.checkinn.Services.AuthService;
 import com.checkinn.checkinn.Services.HotelService;
+import com.checkinn.checkinn.Services.UserService;
 
 @RestController
 @RequestMapping("/hotels")
@@ -23,6 +24,8 @@ public class HotelController {
     private HotelService hotelService;
 
     private AuthService authService;
+
+    private UserService userService;
 
     private final String AUTH_HEADER_NAME = "authorization";
     
@@ -53,6 +56,10 @@ public class HotelController {
 
     @PatchMapping("/edit/{hotel_id}")
     public ResponseEntity<String> editHotel(@RequestHeader (AUTH_HEADER_NAME) String token, @PathVariable int hotel_id, @RequestBody Hotel hotel) {
+        int user_id = authService.decodeToken(token);
+        if (userService.getUserById(user_id).getRole().getRole_name().equalsIgnoreCase("manager")) {
+            return ResponseEntity.ok().body(hotelService.editHotel(hotel_id, hotel));
+        }
         return null;
     }
 
