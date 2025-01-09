@@ -40,6 +40,6 @@ public class AuthController {
 
         if (token == null) { return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null); }
 
-        return ResponseEntity.ok().body(token);
+        return ResponseEntity.ok().header("Authorization", token).body("SUCCESSFUL LOGIN");
     }
 }
