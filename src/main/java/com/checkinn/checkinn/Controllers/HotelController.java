@@ -57,7 +57,7 @@ public class HotelController {
     @PatchMapping("/edit/{hotel_id}")
     public ResponseEntity<String> editHotel(@RequestHeader (AUTH_HEADER_NAME) String token, @PathVariable int hotel_id, @RequestBody Hotel hotel) {
         int user_id = authService.decodeToken(token);
-        if (userService.getUserById(user_id).getRole().getRole_name().equalsIgnoreCase("manager")) {
+        if (userService.getUserById(user_id).getRole().getRoleName().equalsIgnoreCase("manager")) {
             return ResponseEntity.ok().body(hotelService.editHotel(hotel_id, hotel));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UNAUTHORIZED");
