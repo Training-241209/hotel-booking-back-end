@@ -16,6 +16,7 @@ import com.checkinn.checkinn.Entities.Hotel;
 import com.checkinn.checkinn.Services.AuthService;
 import com.checkinn.checkinn.Services.HotelService;
 import com.checkinn.checkinn.Services.UserService;
+import com.checkinn.checkinn.Constants.HttpConstants;
 
 @RestController
 @RequestMapping("/hotels")
@@ -26,8 +27,6 @@ public class HotelController {
     private AuthService authService;
 
     private UserService userService;
-
-    private final String AUTH_HEADER_NAME = "authorization";
     
     @Autowired
     public HotelController(HotelService hotelService, AuthService authService, UserService userService) {
@@ -56,7 +55,7 @@ public class HotelController {
     }
 
     @PatchMapping("/edit/{hotel_id}")
-    public ResponseEntity<String> editHotel(@RequestHeader (AUTH_HEADER_NAME) String token, @PathVariable int hotel_id, @RequestBody Hotel hotel) {
+    public ResponseEntity<String> editHotel(@RequestHeader (HttpConstants.AUTH_HEADER_NAME) String token, @PathVariable int hotel_id, @RequestBody Hotel hotel) {
         int user_id = authService.decodeToken(token);
         if (userService.getUserById(user_id).getRole().getRoleName().equalsIgnoreCase("manager")) {
             return ResponseEntity.ok().body(hotelService.editHotel(hotel_id, hotel));
@@ -65,7 +64,7 @@ public class HotelController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createHotel(@RequestHeader (AUTH_HEADER_NAME) String token, @RequestBody Hotel hotel) {
+    public ResponseEntity<String> createHotel(@RequestHeader (HttpConstants.AUTH_HEADER_NAME) String token, @RequestBody Hotel hotel) {
         int user_id = authService.decodeToken(token);
         if (userService.getUserById(user_id).getRole().getRoleName().equalsIgnoreCase("manager")) {
             return ResponseEntity.ok().body(hotelService.createHotel(hotel));
@@ -74,7 +73,7 @@ public class HotelController {
     }
 
     @PostMapping("/del/{hotel_id}")
-    public ResponseEntity<Hotel> deleteHotel(@RequestHeader (AUTH_HEADER_NAME) String token, @PathVariable int hotel_id) {
+    public ResponseEntity<Hotel> deleteHotel(@RequestHeader (HttpConstants.AUTH_HEADER_NAME) String token, @PathVariable int hotel_id) {
         return null;
     }
 
