@@ -29,4 +29,8 @@ public class HotelService {
     public Iterable<Hotel> getAllHotels() {
         return hotelRepository.findAll();
     }
+
+    public Iterable<Hotel> getHotelsByLocation(String location) {
+        return hotelRepository.findByLocation(location);
+    }
 }

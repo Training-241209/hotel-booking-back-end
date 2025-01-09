@@ -36,4 +36,9 @@ public class HotelController {
         return ResponseEntity.ok().body(hotelService.getAllHotels());
     }
 
+    @GetMapping("/location/{location}")
+    public ResponseEntity<Iterable<Hotel>> getHotelsByLocation(@PathVariable String location) {
+        return ResponseEntity.ok().body(hotelService.getHotelsByLocation(location));
+    }
+
 }
