@@ -3,14 +3,21 @@ package com.checkinn.checkinn.Services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.checkinn.checkinn.Entities.Review;
+import com.checkinn.checkinn.Repositories.ReviewRepository;
+
 @Service
 public class ReviewService {
 
-    private ReviewService reviewService;
+    private ReviewRepository reviewRepository;
 
     @Autowired
-    public ReviewService(ReviewService reviewService) {
-        this.reviewService = reviewService;
+    public ReviewService(ReviewRepository reviewRepository) {
+        this.reviewRepository = reviewRepository;
+    }
+
+    public Iterable<Review> getAllReviews() {
+        return this.
     }
 
 }
