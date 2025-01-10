@@ -168,8 +168,7 @@ public class AuthService {
             user.setRole(defaultRole);
         }
 
-        String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
-        user.setPassword(hashedPassword);
+        user.setPassword(hashPassword(user.getPassword()));
         userRepository.save(user);
     }
 
@@ -212,7 +211,11 @@ public class AuthService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
-        user.setPassword(BCrypt.hashpw(passwordDTO.getNewPassword(), BCrypt.gensalt()));
+        user.setPassword(hashPassword(passwordDTO.getNewPassword()));
         userRepository.save(user);
+    }
+
+    public String hashPassword(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt());
     }
 }
