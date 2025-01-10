@@ -1,10 +1,12 @@
 package com.checkinn.checkinn.Services;
 
+import com.checkinn.checkinn.DTOs.PasswordDTO;
 import com.checkinn.checkinn.DTOs.UserLoginDTO;
 import com.checkinn.checkinn.Entities.Role;
 import com.checkinn.checkinn.Entities.User;
 import com.checkinn.checkinn.Repositories.RoleRepository;
 import com.checkinn.checkinn.Repositories.UserRepository;
+import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -19,10 +21,10 @@ import org.springframework.web.server.ResponseStatusException;
 import java.security.Key;
 import java.util.Date;
 
+import static com.checkinn.checkinn.Constants.GeneralConstants.*;
+
 @Service
 public class AuthService {
-
-    public final static String DEFAULT_ROLE_NAME = "User";
 
     @Value("${JWT_SECRET}")
     private String secretKey;
@@ -73,23 +75,41 @@ public class AuthService {
      *
      * @param token the JWT token to decode
      * @return a UserDTO containing the user ID
+     * @throws ResponseStatusException if the token is incorrectly formed or expired
      */
     public int decodeToken(String token) {
-        var claims = Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-
-        return claims.get("userId", Integer.class);
+        try {
+            var claims = Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claims.get("userId", Integer.class);
+        }
+        catch (JwtException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
     }
 
+    /**
+     * Checks if the user associated with a supplied JWT token is an admin.
+     *
+     * @param token the JWT token to read
+     * @return true if user exists and is admin, false otherwise
+     */
     public boolean isAdmin(String token) {
         int userId = decodeToken(token);
         User user = userRepository.findById(userId).orElse(null);
         return (user == null || !user.getRole().isAdmin());
     }
 
+    /**
+     * Checks if the user associated with a supplied JWT token is an admin.
+     * Throws an exception if the token is invalid or the user is not an admin.
+     *
+     * @param token the JWT token to read
+     * @throws ResponseStatusException if user does not exist or is not admin
+     */
     public void isAdminThrowOtherwise(String token) {
         int userId = decodeToken(token);
         User user = userRepository.findById(userId).orElseThrow(() -> {
@@ -102,21 +122,51 @@ public class AuthService {
     }
 
     /**
+     * Checks if the supplied password matches the token's hashed password.
+     *
+     * @param token the JWT token to read
+     * @param password the password to check against
+     * @throws ResponseStatusException if the passwords don't match
+     */
+    public void passwordMatchesThrowOtherwise(String token, String password) {
+        int userId = decodeToken(token);
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+            return new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        });
+        if (!BCrypt.checkpw(password, user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    /**
      * Registers a new user and save them to the database.
      * The user's email must not already be registered.
      * The user's password will be securely hashed before storage.
      *
      * @param user the user to be registered
+     * @param adminRequest if false, enforces default role on user
      * @throws ResponseStatusException if the email is already registered
      */
-    public void registerUser(User user) {
+    public void registerUser(User user, boolean adminRequest) {
+        // Data validation
+        if (user.getFirstName().isBlank()) { throw new ResponseStatusException(HttpStatus.BAD_REQUEST); }
+        if (user.getLastName().isBlank()) { throw new ResponseStatusException(HttpStatus.BAD_REQUEST); }
+        if (!user.getEmail().matches(EMAIL_REGEX)) { throw new ResponseStatusException(HttpStatus.BAD_REQUEST); }
+        if (!user.getPassword().matches(PASSWORD_REGEX)) { throw new ResponseStatusException(HttpStatus.BAD_REQUEST); }
+
         // User's email cannot already be registered
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
 
-        Role defaultRole = roleRepository.findByRoleName(DEFAULT_ROLE_NAME).orElseThrow();
-        user.setRole(defaultRole);
+        // Force email to be lowercase
+        user.setEmail(user.getEmail().toLowerCase());
+
+        // If not an admin request or role is not specified, force set role to default role
+        if (!adminRequest || user.getRole() == null) {
+            Role defaultRole = roleRepository.findByRoleName(DEFAULT_ROLE_NAME).orElseThrow();
+            user.setRole(defaultRole);
+        }
 
         String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
         user.setPassword(hashedPassword);
@@ -141,5 +191,28 @@ public class AuthService {
         }
 
         return generateToken(foundUser);
+    }
+
+    /**
+     * Updates the password for a specified user.
+     *
+     * @param userId ID of user to update their password
+     * @param passwordDTO object containing new and old passwords.\
+     * @throws ResponseStatusException if user does not exist or password is incorrect for the given user
+     */
+    public void editUserPassword(int userId, PasswordDTO passwordDTO) {
+        // Data validation
+        if (!passwordDTO.getNewPassword().matches(PASSWORD_REGEX)) { throw new ResponseStatusException(HttpStatus.BAD_REQUEST); }
+
+        // User must exist
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+
+        // Password must match the hashed password
+        if (!BCrypt.checkpw(passwordDTO.getOldPassword(), user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+        user.setPassword(BCrypt.hashpw(passwordDTO.getNewPassword(), BCrypt.gensalt()));
+        userRepository.save(user);
     }
 }
