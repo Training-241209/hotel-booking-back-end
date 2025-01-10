@@ -36,6 +36,7 @@ public class HotelService {
         return hotelRepository.findByLocation(location);
     }
 
+    // possible fix might be needed here with logic ping me (john) if issue is here and not fixed yet
     public String editHotel(int hotel_id, Hotel hotel) {
         Optional<Hotel> resp = hotelRepository.findById(hotel_id);
         if (resp.isPresent()) {
