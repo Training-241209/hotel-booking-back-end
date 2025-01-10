@@ -20,4 +20,8 @@ public class ReviewService {
         return this.reviewRepository.findAll();
     }
 
+    public Object getReviewsByHotelId(int hotelId) {
+        return this.reviewRepository.findByHotelId(hotelId);
+    }
+
 }
