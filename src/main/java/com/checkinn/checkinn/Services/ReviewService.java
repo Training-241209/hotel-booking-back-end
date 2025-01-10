@@ -17,7 +17,7 @@ public class ReviewService {
     }
 
     public Iterable<Review> getAllReviews() {
-        return this.
+        return this.reviewRepository.findAll();
     }
 
 }
