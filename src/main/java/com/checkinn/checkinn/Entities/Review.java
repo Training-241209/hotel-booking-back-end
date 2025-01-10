@@ -5,8 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,11 +34,11 @@ public class Review {
     private String description;
 
     @ManyToOne
-    @Column(name = "hotel_id_fk")
-    private int hotelId;
+    @JoinColumn(name = "hotel_id_fk")
+    private Hotel hotel;
 
-    @OneToOne
-    @Column(name = "user_id_fk")
-    private int userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id_fk")
+    private User user;
 
 }
