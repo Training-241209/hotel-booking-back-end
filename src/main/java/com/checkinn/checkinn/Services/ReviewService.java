@@ -20,7 +20,7 @@ public class ReviewService {
         return this.reviewRepository.findAll();
     }
 
-    public Object getReviewsByHotelId(int hotelId) {
+    public Iterable<Review> getReviewsByHotelId(int hotelId) {
         return this.reviewRepository.findByHotelId(hotelId);
     }
 

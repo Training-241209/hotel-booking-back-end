@@ -6,5 +6,5 @@ import com.checkinn.checkinn.Entities.Review;
 
 public interface ReviewRepository extends CrudRepository<Review, Integer> {
 
-    Object findByHotelId(int hotelId);
+    Iterable<Review> findByHotelId(int hotelId);
 }
