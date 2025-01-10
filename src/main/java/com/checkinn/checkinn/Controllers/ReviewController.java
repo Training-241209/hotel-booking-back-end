@@ -33,8 +33,8 @@ public class ReviewController {
     }
 
     @GetMapping("/hotel/{hotelId}")
-    public Iterable<Review> getReviewsByHotelId(@PathVariable int hotelId) {
-        return null;
+    public ResponseEntity<Iterable<Review>> getReviewsByHotelId(@PathVariable int hotelId) {
+        return ResponseEntity.ok().body(this.reviewService.getReviewsByHotelId(hotelId));
     }
 
     @GetMapping("/user/")
