@@ -62,8 +62,9 @@ public class ReservationController {
     }
 
     @PostMapping("/create/{hotelId}")
-    public String createReservation(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token) {
-        return "reservations";
+    public String createReservation(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int hotelId, @RequestBody Reservation reservation) {
+        int userId = this.authService.decodeToken(token);
+        return ResponseEntity.ok().body(this.reservationService.createReservation(userId, hotelId, reservation));
     }
 
     @DeleteMapping("/del/{reservationId}")
