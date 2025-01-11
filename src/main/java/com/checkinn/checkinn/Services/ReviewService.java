@@ -61,9 +61,9 @@ public class ReviewService {
             if (r.getUser().getUserId() != userId) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "UNAUTHORIZED");
             }
-            r.setDescription(review.getDescription());
-            r.setRating(review.getRating());
-            r.setTitle(review.getTitle());
+            if (!review.getDescription().isBlank()) r.setDescription(review.getDescription());
+            if (review.getRating()>0 && review.getRating()<=5) r.setRating(review.getRating());
+            if (!review.getTitle().isBlank()) r.setTitle(review.getTitle());
             reviewRepository.save(r);
             return "REVIEW UPDATED";
         }
