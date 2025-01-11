@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -55,8 +56,9 @@ public class ReservationController {
     }
 
     @PatchMapping("/edit/{reservationId}")
-    public String editReservation(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token) {
-        return "reservations";
+    public ResponseEntity<String> editReservation(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int reservationId, @RequestBody Reservation reservation) {
+        int userId = this.authService.decodeToken(token);
+        return ResponseEntity.ok().body(reservationService.editReservation(userId, reservationId, reservation));
     }
 
     @PostMapping("/create/{hotelId}")
