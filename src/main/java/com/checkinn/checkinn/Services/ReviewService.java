@@ -57,7 +57,6 @@ public class ReviewService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "HOTEL NOT FOUND");
     }
 
-    // could have same issue as hotel update if change is needed message me to fix
     public String editReview(int userId, int reviewId, Review review) {
         Optional<Review> resp = reviewRepository.findById(reviewId);
         if (resp.isPresent()){
