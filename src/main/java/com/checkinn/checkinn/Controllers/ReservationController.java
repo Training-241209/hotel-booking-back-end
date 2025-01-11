@@ -66,7 +66,7 @@ public class ReservationController {
         return "reservations";
     }
 
-    @DeleteMapping("/delete/{reservationId}")
+    @DeleteMapping("/del/{reservationId}")
     public ResponseEntity<String> deleteReservation(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int reservationId) {
         int userId = this.authService.decodeToken(token);
         return ResponseEntity.ok().body(this.reservationService.deleteReservation(userId, reservationId));
