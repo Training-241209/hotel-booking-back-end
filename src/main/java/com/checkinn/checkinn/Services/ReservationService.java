@@ -37,6 +37,9 @@ public class ReservationService {
         return this.reservationRepository.findByHotel_HotelId(hotelId);
     }
 
+    /*
+     *  better date validation to be added later
+     */
     public String editReservation(int userId, int reservationId, Reservation reservation) {
         if (!reservationRepository.existsById(reservationId)) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "RESERVATION NOT FOUND");
         if (reservationRepository.findById(reservationId).get().getUser().getUserId() != userId) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "UNAUTHORIZED");
@@ -59,6 +62,9 @@ public class ReservationService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "RESERVATION NOT FOUND");
     }
 
+    /*
+     *  better date validation to be added later
+     */
     public String createReservation(int userId, int hotelId, Reservation reservation) {
             if (!this.hotelRepository.existsById(hotelId)) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "HOTEL NOT FOUND");
             if (reservation.getCheckInTime().after(reservation.getCheckOutTime())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "INVALID DATES");
