@@ -1,4 +1,8 @@
 package com.checkinn.checkinn.Repositories;
 
-public class ReservationRepository{
+import org.springframework.data.repository.CrudRepository;
+
+import com.checkinn.checkinn.Entities.Reservation;
+
+public interface ReservationRepository extends CrudRepository<Reservation, Long> {
 }

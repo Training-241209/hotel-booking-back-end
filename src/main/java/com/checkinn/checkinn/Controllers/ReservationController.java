@@ -1,12 +1,17 @@
 package com.checkinn.checkinn.Controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.checkinn.checkinn.Constants.GeneralConstants;
+import com.checkinn.checkinn.Entities.Reservation;
 import com.checkinn.checkinn.Services.ReservationService;
 
 @Controller
@@ -15,13 +20,14 @@ public class ReservationController {
 
     private ReservationService reservationService;
 
+    @Autowired
     public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
     }
     
     @GetMapping("/")
-    public String getAllReservations() {
-        return "reservations";
+    public ResponseEntity<Iterable<Reservation>> getAllReservations(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token) {
+        return ResponseEntity.ok().body(this.reservationService.getAllReservations());
     }
 
     @GetMapping("/user")
@@ -30,7 +36,7 @@ public class ReservationController {
     }
 
     @GetMapping("/user/{userId}")
-    public String getReservationsByUserId() {
+    public String getReservationsByUserId(@) {
         return "reservations";
     }
 
