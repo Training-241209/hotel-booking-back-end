@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.checkinn.checkinn.Entities.Review;
+import com.checkinn.checkinn.Services.AuthService;
 import com.checkinn.checkinn.Services.ReviewService;
 import com.checkinn.checkinn.Constants.GeneralConstants;
 
@@ -20,11 +21,14 @@ import com.checkinn.checkinn.Constants.GeneralConstants;
 @RequestMapping("/reviews")
 public class ReviewController {
 
+    private AuthService authService;
+
     private ReviewService reviewService;
 
     @Autowired
-    public ReviewController(ReviewService reviewService) {
+    public ReviewController(ReviewService reviewService, AuthService authService) {
         this.reviewService = reviewService;
+        this.authService = authService;
     }
 
     @GetMapping("/")
@@ -39,7 +43,8 @@ public class ReviewController {
 
     @GetMapping("/user/")
     public Iterable<Review> getReviewsBySelf(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token) {
-        return null;
+        int userId = this.authService.decodeToken(token);
+        return ResponseEntity.ok().body(this.reviewService.getReviewsByUserId(userId));
     }
 
     @GetMapping("/user/{userId}")
