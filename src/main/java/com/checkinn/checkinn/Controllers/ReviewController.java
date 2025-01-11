@@ -48,8 +48,8 @@ public class ReviewController {
     }
 
     @GetMapping("/user/{userId}")
-    public Iterable<Review> getReviewsByUserId(@PathVariable int userId) {
-        return null;
+    public ResponseEntity<Iterable<Review>> getReviewsByUserId(@PathVariable int userId) {
+        return ResponseEntity.ok().body(this.reviewService.getReviewsByUserId(userId));
     }
 
     @PatchMapping("/edit/{reviewId}")
