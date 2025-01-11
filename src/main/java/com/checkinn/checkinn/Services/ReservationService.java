@@ -29,8 +29,6 @@ public class ReservationService {
     }
 
     public String editReservation(int userId, int reservationId, Reservation reservation) {
-        Optional<Reservation> reservationToEdit = this.reservationRepository.findById(reservationId);
-        if (reservationToEdit)
         return "RESERVATION UPDATED";
     }
 }
