@@ -36,6 +36,7 @@ public class ReviewService {
     public String createReview(User user, Review review) {
         if (review.getDescription().length()>0 && review.getDescription().length()>0 && review.getRating()>0 && review.getRating()<=5) {
             review.setUser(user);
+            reviewRepository.save(review);
             return "REVIEW CREATED";
         }
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "INVALID REVIEW INFORMATION");

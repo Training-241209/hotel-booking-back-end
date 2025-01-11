@@ -70,7 +70,7 @@ public class ReviewController {
         return ResponseEntity.ok().body(resp);
     }
 
-    @DeleteMapping("/delete/{reviewId}")
+    @DeleteMapping("/del/{reviewId}")
     public ResponseEntity<String> deleteReview(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int reviewId) {
         int userId = this.authService.decodeToken(token);
         return ResponseEntity.ok().body(reviewService.deleteReview(userId, reviewId));
