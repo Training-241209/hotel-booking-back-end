@@ -1,4 +1,4 @@
 package com.checkinn.checkinn.Repositories;
 
-public class ReservationRepository {
+public class ReservationRepository{
 }
