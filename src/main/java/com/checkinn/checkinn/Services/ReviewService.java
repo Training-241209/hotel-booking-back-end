@@ -1,9 +1,12 @@
 package com.checkinn.checkinn.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.checkinn.checkinn.Entities.Review;
+import com.checkinn.checkinn.Entities.User;
 import com.checkinn.checkinn.Repositories.ReviewRepository;
 
 @Service
@@ -28,9 +31,12 @@ public class ReviewService {
         return this.reviewRepository.findByUserId(userId);
     }
 
-    public void createReview(int userId, Review review) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createReview'");
+    public String createReview(User user, Review review) {
+        if (review.getDescription().length()>0 && review.getDescription().length()>0 && review.getRating()>0 && review.getRating()<=5) {
+            review.setUser(user);
+            return "REVIEW CREATED";
+        }
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "INVALID REVIEW INFORMATION");
     }
 
 }

@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.checkinn.checkinn.Entities.Review;
+import com.checkinn.checkinn.Entities.User;
 import com.checkinn.checkinn.Services.AuthService;
 import com.checkinn.checkinn.Services.ReviewService;
+import com.checkinn.checkinn.Services.UserService;
 import com.checkinn.checkinn.Constants.GeneralConstants;
 
 @RestController
@@ -25,10 +27,13 @@ public class ReviewController {
 
     private ReviewService reviewService;
 
+    private UserService userService;
+
     @Autowired
-    public ReviewController(ReviewService reviewService, AuthService authService) {
+    public ReviewController(ReviewService reviewService, AuthService authService, UserService userService) {
         this.reviewService = reviewService;
         this.authService = authService;
+        this.userService = userService;
     }
 
     @GetMapping("/")
@@ -59,8 +64,8 @@ public class ReviewController {
 
     @PostMapping("/create")
     public ResponseEntity<String> createReview(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @RequestBody Review review) {
-        int userId = this.authService.decodeToken(token);
-        String resp = this.reviewService.createReview(userId, review);
+        User user_resp = this.userService.getUserById(this.authService.decodeToken(token));
+        String resp = this.reviewService.createReview(user_resp, review);
         return ResponseEntity.ok().body(resp);
     }
 
