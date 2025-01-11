@@ -59,7 +59,8 @@ public class ReviewController {
 
     @PatchMapping("/edit/{reviewId}")
     public ResponseEntity<String> editReview(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int reviewId, @RequestBody Review review) {
-        return null;
+        int userId = this.authService.decodeToken(token);
+        return ResponseEntity.ok().body(reviewService.editReview(userId, reviewId, review));
     }
 
     @PostMapping("/create")

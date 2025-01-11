@@ -50,4 +50,9 @@ public class ReviewService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "HOTEL NOT FOUND");
     }
 
+    public Object editReview(int userId, int reviewId, Review review) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'editReview'");
+    }
+
 }
