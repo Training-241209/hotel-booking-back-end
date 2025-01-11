@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.checkinn.checkinn.Entities.Review;
 import com.checkinn.checkinn.Services.ReviewService;
-import com.checkinn.checkinn.Constants.HttpConstants;
+import com.checkinn.checkinn.Constants.GeneralConstants;
 
 @RestController
 @RequestMapping("/reviews")
@@ -38,7 +38,7 @@ public class ReviewController {
     }
 
     @GetMapping("/user/")
-    public Iterable<Review> getReviewsBySelf(@RequestHeader (HttpConstants.AUTH_HEADER_NAME) String token) {
+    public Iterable<Review> getReviewsBySelf(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token) {
         return null;
     }
 
@@ -48,17 +48,17 @@ public class ReviewController {
     }
 
     @PatchMapping("/edit/{reviewId}")
-    public String editReview(@RequestHeader (HttpConstants.AUTH_HEADER_NAME) String token, @PathVariable int reviewId, @RequestBody Review review) {
+    public String editReview(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int reviewId, @RequestBody Review review) {
         return null;
     }
 
     @PostMapping("/create")
-    public String createReview(@RequestHeader (HttpConstants.AUTH_HEADER_NAME) String token, @RequestBody Review review) {
+    public String createReview(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @RequestBody Review review) {
         return null;
     }
 
     @DeleteMapping("/delete/{reviewId}")
-    public String deleteReview(@RequestHeader (HttpConstants.AUTH_HEADER_NAME) String token, @PathVariable int reviewId) {
+    public String deleteReview(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int reviewId) {
         return null;
     }
 
