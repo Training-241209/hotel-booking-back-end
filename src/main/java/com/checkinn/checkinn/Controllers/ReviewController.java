@@ -42,7 +42,7 @@ public class ReviewController {
     }
 
     @GetMapping("/user/")
-    public Iterable<Review> getReviewsBySelf(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token) {
+    public ResponseEntity<Iterable<Review>> getReviewsBySelf(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token) {
         int userId = this.authService.decodeToken(token);
         return ResponseEntity.ok().body(this.reviewService.getReviewsByUserId(userId));
     }
