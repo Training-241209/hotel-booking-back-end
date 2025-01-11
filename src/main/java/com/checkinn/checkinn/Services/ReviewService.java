@@ -24,9 +24,8 @@ public class ReviewService {
         return this.reviewRepository.findByHotelId(hotelId);
     }
 
-    public Object getReviewsByUserId(int userId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getReviewsByUserId'");
+    public Iterable<Review> getReviewsByUserId(int userId) {
+        return this.reviewRepository.findByUserId(userId);
     }
 
 }
