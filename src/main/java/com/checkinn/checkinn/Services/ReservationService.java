@@ -19,4 +19,8 @@ public class ReservationService {
     public Iterable<Reservation> getAllReservations() {
         return this.reservationRepository.findAll();
     }
+
+    public Iterable<Reservation> getReservationsByUserId(int userId) {
+        return this.reservationRepository.findByUser_UserId(userId);
+    }
 }

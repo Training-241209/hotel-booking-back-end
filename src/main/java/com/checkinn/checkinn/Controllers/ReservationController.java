@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.checkinn.checkinn.Constants.GeneralConstants;
 import com.checkinn.checkinn.Entities.Reservation;
+import com.checkinn.checkinn.Services.AuthService;
 import com.checkinn.checkinn.Services.ReservationService;
 
 @Controller
@@ -20,43 +21,48 @@ public class ReservationController {
 
     private ReservationService reservationService;
 
+    private AuthService authService;
+
     @Autowired
-    public ReservationController(ReservationService reservationService) {
+    public ReservationController(ReservationService reservationService, AuthService authService) {
         this.reservationService = reservationService;
+        this.authService = authService;
     }
     
     @GetMapping("/")
     public ResponseEntity<Iterable<Reservation>> getAllReservations(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token) {
+        this.authService.isAdminThrowOtherwise(token);
         return ResponseEntity.ok().body(this.reservationService.getAllReservations());
     }
 
     @GetMapping("/user")
-    public String getReservationsBySelf() {
-        return "reservations";
+    public ResponseEntity<Iterable<Reservation>> getReservationsBySelf(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token) {
+        this.authService.decodeToken(token);
+        return ResponseEntity.ok().body(this.reservationService.getReservationsByUserId(this.authService.decodeToken(token)));
     }
 
     @GetMapping("/user/{userId}")
-    public String getReservationsByUserId(@) {
+    public String getReservationsByUserId(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token) {
         return "reservations";
     }
 
     @GetMapping("/hotel/{hotelId}")
-    public String getReservationsByHotelId() {
+    public String getReservationsByHotelId(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token) {
         return "reservations";
     }
 
     @PatchMapping("/edit/{reservationId}")
-    public String editReservation() {
+    public String editReservation(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token) {
         return "reservations";
     }
 
     @PostMapping("/create/{hotelId}")
-    public String createReservation() {
+    public String createReservation(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token) {
         return "reservations";
     }
 
     @DeleteMapping("/delete/{reservationId}")
-    public String deleteReservation() {
+    public String deleteReservation(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token) {
         return "reservations";
     }
 }
