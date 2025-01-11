@@ -24,8 +24,7 @@ public class ReservationService {
         return this.reservationRepository.findByUser_UserId(userId);
     }
 
-    public Object getReservationsByHotelId(int hotelId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getReservationsByHotelId'");
+    public Iterable<Reservation> getReservationsByHotelId(int hotelId) {
+        return this.reservationRepository.findByHotel_HotelId(hotelId);
     }
 }
