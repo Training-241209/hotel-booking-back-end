@@ -62,10 +62,14 @@ public class ReservationService {
     public String createReservation(int userId, int hotelId, Reservation reservation) {
             if (!this.hotelRepository.existsById(hotelId)) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "HOTEL NOT FOUND");
             if (reservation.getCheckInTime().after(reservation.getCheckOutTime())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "INVALID DATES");
-            if (this.hotelRepository.findById(hotelId).get().getRooms() >= reservationRepository.findByHotel_HotelId(hotelId).size()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NO EMPTY ROOMS");
+            if (!(this.hotelRepository.findById(hotelId).get().getRooms() >= reservationRepository.findByHotel_HotelId(hotelId).size())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NO EMPTY ROOMS");
             reservation.setHotel(this.hotelRepository.findById(hotelId).get());
             reservation.setUser(this.userService.getUserById(userId));
             reservationRepository.save(reservation);
             return "RESERVATION CREATED";
+    }
+
+    public Reservation getReservationById(int reservationId) {
+        return reservationRepository.findById(reservationId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "RESERVATION NOT FOUND"));
     }
 }
