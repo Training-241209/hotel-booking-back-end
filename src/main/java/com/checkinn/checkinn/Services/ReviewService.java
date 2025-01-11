@@ -39,4 +39,15 @@ public class ReviewService {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "INVALID REVIEW INFORMATION");
     }
 
+    public String deleteReview(int userId, int reviewId) {
+        if (reviewRepository.existsById(reviewId)) {
+            if (reviewRepository.findById(reviewId).get().getUser().getUserId() != userId) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "UNAUTHORIZED");
+            }
+            reviewRepository.deleteById(reviewId);
+            return "REVIEW DELETED";
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "HOTEL NOT FOUND");
+    }
+
 }
