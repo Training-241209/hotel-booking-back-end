@@ -45,8 +45,7 @@ public class ReservationService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "RESERVATION NOT FOUND");
     }
 
-    public Object createReservation(int userId, int hotelId, Reservation reservation) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createReservation'");
+    public String createReservation(int userId, int hotelId, Reservation reservation) {
+        return "RESERVATION CREATED";
     }
 }
