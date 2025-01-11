@@ -53,13 +53,15 @@ public class ReviewController {
     }
 
     @PatchMapping("/edit/{reviewId}")
-    public String editReview(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int reviewId, @RequestBody Review review) {
+    public ResponseEntity<String> editReview(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int reviewId, @RequestBody Review review) {
         return null;
     }
 
     @PostMapping("/create")
-    public String createReview(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @RequestBody Review review) {
-        return null;
+    public ResponseEntity<String> createReview(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @RequestBody Review review) {
+        int userId = this.authService.decodeToken(token);
+        String resp = this.reviewService.createReview(userId, review);
+        return ResponseEntity.ok().body(resp);
     }
 
     @DeleteMapping("/delete/{reviewId}")

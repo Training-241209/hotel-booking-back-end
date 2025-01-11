@@ -28,4 +28,9 @@ public class ReviewService {
         return this.reviewRepository.findByUserId(userId);
     }
 
+    public void createReview(int userId, Review review) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'createReview'");
+    }
+
 }
