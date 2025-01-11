@@ -34,11 +34,11 @@ public class Review {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "hotel_id_fk")
+    @JoinColumn(name = "hotel_id")
     private Hotel hotel;
 
     @ManyToOne
-    @JoinColumn(name = "user_id_fk")
+    @JoinColumn(name = "user_id")
     private User user;
 
 }
