@@ -1,5 +1,7 @@
 package com.checkinn.checkinn.Services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -50,9 +52,22 @@ public class ReviewService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "HOTEL NOT FOUND");
     }
 
-    public Object editReview(int userId, int reviewId, Review review) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'editReview'");
+    // could have same issue as hotel update if change is needed message me to fix
+    public String editReview(int userId, int reviewId, Review review) {
+        Optional<Review> resp = reviewRepository.findById(reviewId);
+        if (resp.isPresent()){
+            Review r = resp.get();
+            if (r.getUser().getUserId() != userId) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "UNAUTHORIZED");
+            }
+            r.setDescription(review.getDescription());
+            r.setRating(review.getRating());
+            r.setTitle(review.getTitle());
+            reviewRepository.save(r);
+            return "REVIEW UPDATED";
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "REVIEW NOT FOUND");
+        
     }
 
 }
