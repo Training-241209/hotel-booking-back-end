@@ -4,7 +4,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.checkinn.checkinn.Entities.Reservation;
 
-public interface ReservationRepository extends CrudRepository<Reservation, Long> {
+public interface ReservationRepository extends CrudRepository<Reservation, Integer> {
 
     Iterable<Reservation> findByUser_UserId(int userId);
 
