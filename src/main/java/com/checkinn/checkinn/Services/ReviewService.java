@@ -9,6 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.checkinn.checkinn.Entities.Review;
 import com.checkinn.checkinn.Entities.User;
+import com.checkinn.checkinn.Repositories.HotelRepository;
 import com.checkinn.checkinn.Repositories.ReviewRepository;
 
 @Service
@@ -16,9 +17,12 @@ public class ReviewService {
 
     private ReviewRepository reviewRepository;
 
+    private HotelRepository hotelRepository;
+
     @Autowired
-    public ReviewService(ReviewRepository reviewRepository) {
+    public ReviewService(ReviewRepository reviewRepository, HotelRepository hotelRepository) {
         this.reviewRepository = reviewRepository;
+        this.hotelRepository = hotelRepository;
     }
 
     public Iterable<Review> getAllReviews() {
@@ -34,7 +38,7 @@ public class ReviewService {
     }
 
     public String createReview(User user, Review review) {
-        if (review.getDescription().length()>0 && review.getDescription().length()>0 && review.getRating()>0 && review.getRating()<=5) {
+        if (!review.getTitle().isBlank() && !review.getDescription().isBlank() && review.getRating()>=1 && review.getRating()<=5 && this.hotelRepository.existsById(review.getHotel().getHotelId())) {
             review.setUser(user);
             reviewRepository.save(review);
             return "REVIEW CREATED";
