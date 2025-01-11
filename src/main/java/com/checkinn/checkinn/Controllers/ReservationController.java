@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,13 +43,15 @@ public class ReservationController {
     }
 
     @GetMapping("/user/{userId}")
-    public String getReservationsByUserId(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token) {
-        return "reservations";
+    public ResponseEntity<Iterable<Reservation>> getReservationsByUserId(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int userId) {
+        this.authService.isAdminThrowOtherwise(token);
+        return ResponseEntity.ok().body(this.reservationService.getReservationsByUserId(userId));
     }
 
     @GetMapping("/hotel/{hotelId}")
-    public String getReservationsByHotelId(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token) {
-        return "reservations";
+    public ResponseEntity<Iterable<Reservation>> getReservationsByHotelId(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int hotelId) {
+        this.authService.isAdminThrowOtherwise(token);
+        return ResponseEntity.ok().body(this.reservationService.getReservationsByHotelId(hotelId));
     }
 
     @PatchMapping("/edit/{reservationId}")
