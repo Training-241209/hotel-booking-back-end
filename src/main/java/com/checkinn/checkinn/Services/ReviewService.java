@@ -26,11 +26,11 @@ public class ReviewService {
     }
 
     public Iterable<Review> getReviewsByHotelId(int hotelId) {
-        return this.reviewRepository.findByHotelId(hotelId);
+        return this.reviewRepository.findByHotel_HotelId(hotelId);
     }
 
     public Iterable<Review> getReviewsByUserId(int userId) {
-        return this.reviewRepository.findByUserId(userId);
+        return this.reviewRepository.findByUser_UserId(userId);
     }
 
     public String createReview(User user, Review review) {
