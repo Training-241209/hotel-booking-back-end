@@ -39,13 +39,13 @@ public class ReservationController {
 
     @GetMapping("/{reservationId}")
     public ResponseEntity<Reservation> getReservationById(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int reservationId) {
-        this.authService.decodeToken(token);
+        int userId = this.reservationService.getUserByReservationId(reservationId).getUserId();
+        this.authService.tokenMatchesUserThrowOtherwise(token, userId);
         return ResponseEntity.ok().body(this.reservationService.getReservationById(reservationId));
     }
 
     @GetMapping("/user")
     public ResponseEntity<Iterable<Reservation>> getReservationsBySelf(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token) {
-        this.authService.decodeToken(token);
         return ResponseEntity.ok().body(this.reservationService.getReservationsByUserId(this.authService.decodeToken(token)));
     }
 
