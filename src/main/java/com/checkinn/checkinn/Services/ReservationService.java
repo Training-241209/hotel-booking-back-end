@@ -1,5 +1,6 @@
 package com.checkinn.checkinn.Services;
 
+import com.checkinn.checkinn.Entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -77,5 +78,11 @@ public class ReservationService {
 
     public Reservation getReservationById(int reservationId) {
         return reservationRepository.findById(reservationId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "RESERVATION NOT FOUND"));
+    }
+
+    public User getUserByReservationId(int reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
+        if (reservation == null) { return null; }
+        return reservation.getUser();
     }
 }

@@ -2,8 +2,12 @@ package com.checkinn.checkinn.Services;
 
 import com.checkinn.checkinn.DTOs.PasswordDTO;
 import com.checkinn.checkinn.DTOs.UserLoginDTO;
+import com.checkinn.checkinn.Entities.Reservation;
+import com.checkinn.checkinn.Entities.Review;
 import com.checkinn.checkinn.Entities.Role;
 import com.checkinn.checkinn.Entities.User;
+import com.checkinn.checkinn.Repositories.ReservationRepository;
+import com.checkinn.checkinn.Repositories.ReviewRepository;
 import com.checkinn.checkinn.Repositories.RoleRepository;
 import com.checkinn.checkinn.Repositories.UserRepository;
 import io.jsonwebtoken.JwtException;
@@ -36,6 +40,7 @@ public class AuthService {
     public AuthService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+
     }
 
     /**
@@ -122,7 +127,20 @@ public class AuthService {
     }
 
     /**
-     * Checks if the supplied password matches the token's hashed password.
+     *  Checks if the supplied userId matches a specified ID
+     *
+     * @param token the JWT token to read
+     * @param userId ID to compare against and check for equality
+     * @throws ResponseStatusException if the userIds don't match
+     */
+    public void tokenMatchesUserThrowOtherwise(String token, int userId) {
+        if (decodeToken(token) != userId) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    /**
+     * Checks if the supplied password matches the token user's hashed password.
      *
      * @param token the JWT token to read
      * @param password the password to check against
