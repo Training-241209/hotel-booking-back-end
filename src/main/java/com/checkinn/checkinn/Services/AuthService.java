@@ -127,14 +127,15 @@ public class AuthService {
     }
 
     /**
-     *  Checks if the supplied userId matches a specified ID
+     *  Checks if the supplied userId matches a specified ID.
+     *  THIS IS BYPASSED WITH ADMIN PERMISSIONS.
      *
      * @param token the JWT token to read
      * @param userId ID to compare against and check for equality
      * @throws ResponseStatusException if the userIds don't match
      */
     public void tokenMatchesUserThrowOtherwise(String token, int userId) {
-        if (decodeToken(token) != userId) {
+        if (decodeToken(token) != userId && !isAdmin(token)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
