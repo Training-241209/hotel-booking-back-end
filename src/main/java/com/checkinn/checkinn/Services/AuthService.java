@@ -2,12 +2,8 @@ package com.checkinn.checkinn.Services;
 
 import com.checkinn.checkinn.DTOs.PasswordDTO;
 import com.checkinn.checkinn.DTOs.UserLoginDTO;
-import com.checkinn.checkinn.Entities.Reservation;
-import com.checkinn.checkinn.Entities.Review;
 import com.checkinn.checkinn.Entities.Role;
 import com.checkinn.checkinn.Entities.User;
-import com.checkinn.checkinn.Repositories.ReservationRepository;
-import com.checkinn.checkinn.Repositories.ReviewRepository;
 import com.checkinn.checkinn.Repositories.RoleRepository;
 import com.checkinn.checkinn.Repositories.UserRepository;
 import io.jsonwebtoken.JwtException;
@@ -30,7 +26,7 @@ import static com.checkinn.checkinn.Constants.GeneralConstants.*;
 @Service
 public class AuthService {
 
-    @Value("${JWT_SECRET}")
+    @Value("${jwt.secret}")
     private String secretKey;
 
     private UserRepository userRepository;
