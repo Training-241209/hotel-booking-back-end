@@ -2,6 +2,9 @@ package com.checkinn.checkinn.Services;
 
 import com.checkinn.checkinn.Entities.User;
 import com.checkinn.checkinn.Repositories.UserRepository;
+
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -85,5 +88,17 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
         if (reservation == null) { return null; }
         return reservation.getUser();
+    }
+
+    private boolean dateValidation(Date getCheckInTime, Date getCheckOutTime) {
+        String inTime = getCheckInTime.toString();
+        String outTime = getCheckInTime.toString();
+        // dow mon dd hh:mm:ss zzz yyyy
+        if (inTime.substring(4,7).equalsIgnoreCase(outTime.substring(4,7))) {
+            if(Integer.parseInt(inTime.substring(8, 10))<Integer.parseInt(outTime.substring(8, 10))){
+                return true;
+            }
+        }
+        return false;
     }
 }
