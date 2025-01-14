@@ -1,6 +1,7 @@
 package com.checkinn.checkinn.Services;
 
 import com.checkinn.checkinn.Entities.User;
+import com.checkinn.checkinn.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,13 +18,13 @@ public class ReservationService {
 
     private HotelRepository hotelRepository;
 
-    private UserService userService;
+    private UserRepository userRepository;
 
     @Autowired
-    public ReservationService(ReservationRepository reservationRepository, HotelRepository hotelRepository, UserService userService) {
+    public ReservationService(ReservationRepository reservationRepository, HotelRepository hotelRepository, UserRepository userRepository) {
         this.reservationRepository = reservationRepository;
         this.hotelRepository = hotelRepository;
-        this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     public Iterable<Reservation> getAllReservations() {
@@ -71,7 +72,7 @@ public class ReservationService {
             if (reservation.getCheckInTime().after(reservation.getCheckOutTime())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "INVALID DATES");
             if (!(this.hotelRepository.findById(hotelId).get().getRooms() >= reservationRepository.findByHotel_HotelId(hotelId).size())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NO EMPTY ROOMS");
             reservation.setHotel(this.hotelRepository.findById(hotelId).get());
-            reservation.setUser(this.userService.getUserById(userId));
+            reservation.setUser(this.userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "USER NOT FOUND")));
             reservationRepository.save(reservation);
             return "RESERVATION CREATED";
     }
