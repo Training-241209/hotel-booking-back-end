@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class AuthServiceTests {
+class AuthServiceTests {
 
     @Mock
     private UserRepository userRepository;
@@ -49,7 +49,7 @@ public class AuthServiceTests {
     }
 
     @Test
-    public void register_user_successfully() {
+    void register_user_successfully() {
         // Setup
         User user = new User();
         user.setEmail("testuer@mail.com");
@@ -67,7 +67,7 @@ public class AuthServiceTests {
     }
 
     @Test
-    public void register_user_with_existing_email() {
+    void register_user_with_existing_email() {
         // Setup
         String email = "testuer@mail.com";
         String password = "Password123";
@@ -96,7 +96,7 @@ public class AuthServiceTests {
     }
 
     @Test
-    public void login_user_successfully() {
+    void login_user_successfully() {
         // Setup
         String email = "testuer@mail.com";
         String password = "Password123";
@@ -126,7 +126,7 @@ public class AuthServiceTests {
     }
 
     @Test
-    public void login_user_with_non_existing_email() {
+    void login_user_with_non_existing_email() {
         // Setup
         String email = "testuer@mail.com";
         String password = "Password123";
@@ -156,7 +156,7 @@ public class AuthServiceTests {
     }
 
     @Test
-    public void login_user_with_wrong_password() {
+    void login_user_with_wrong_password() {
         // Setup
         String email = "testuer@mail.com";
         String password = "Password123";
