@@ -1,5 +1,6 @@
 package com.checkinn.checkinn.Config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -8,14 +9,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig {
 
+    @Value("${deploy.url}")
+    private String deployedURL;
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // Allow all endpoints
-                        .allowedOrigins("http://localhost:5173") // Allow requests from your frontend
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH") // Allow HTTP methods
+                        .allowedOrigins(deployedURL) // Allow requests from your frontend
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH") // Allow HTTP methods
                         .allowedHeaders("*") // Allow all headers
                         .exposedHeaders("Authorization") // Expose the 'Authorization' header
                         .allowCredentials(true); // Allow credentials (if needed)
