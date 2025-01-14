@@ -36,8 +36,8 @@ public class UserService {
      */
     public void editUser(int userId, UserDetailsDTO userDetailsDTO) {
 
-        if (userDetailsDTO.getFirstName().isBlank()) { throw new ResponseStatusException(HttpStatus.BAD_REQUEST); }
-        if (userDetailsDTO.getLastName().isBlank()) { throw new ResponseStatusException(HttpStatus.BAD_REQUEST); }
+        if (userDetailsDTO.getFirstName().isBlank()) { throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "FIRST NAME CANNOT BE BLANK"); }
+        if (userDetailsDTO.getLastName().isBlank()) { throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "LAST NAME CANNOT BE BLANK"); }
 
         User user = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
         user.setFirstName(userDetailsDTO.getFirstName());

@@ -47,14 +47,13 @@ public class ReviewService {
     }
 
     public String deleteReview(int userId, int reviewId) {
-        if (reviewRepository.existsById(reviewId)) {
-            if (reviewRepository.findById(reviewId).get().getUser().getUserId() != userId) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "UNAUTHORIZED");
-            }
-            reviewRepository.deleteById(reviewId);
-            return "REVIEW DELETED";
+        Review review = reviewRepository.findById(reviewId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "HOTEL NOT FOUND"));
+        if (review.getUser().getUserId() != userId) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "UNAUTHORIZED");
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "HOTEL NOT FOUND");
+        reviewRepository.deleteById(reviewId);
+        return "REVIEW DELETED";
     }
 
     public String editReview(int userId, int reviewId, Review review) {

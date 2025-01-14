@@ -20,13 +20,7 @@ public class HotelService {
         this.hotelRepository = hotelRepository;
     }
 
-    public Hotel getHotelById(int hotel_id) {
-        Optional<Hotel> resp = hotelRepository.findById(hotel_id);
-        if (resp.isPresent()) {
-            return resp.get();
-        }
-        return null;
-    }
+    public Hotel getHotelById(int hotel_id) { return hotelRepository.findById(hotel_id).orElse(null); }
 
     public Iterable<Hotel> getAllHotels() {
         return hotelRepository.findAll();
@@ -62,10 +56,7 @@ public class HotelService {
     }
 
     public String deleteHotel(int hotel_id) {
-        if (hotelRepository.existsById(hotel_id)) {
-            hotelRepository.deleteById(hotel_id);
-            return "HOTEL DELETED";
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "HOTEL NOT FOUND");
+        hotelRepository.deleteById(hotel_id);
+        return "HOTEL DELETED";
     }
 }

@@ -41,26 +41,26 @@ public class ReservationService {
     /*
      *  better date validation to be added later
      */
-    public String editReservation(int userId, int reservationId, Reservation reservation) {
-        if (!reservationRepository.existsById(reservationId)) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "RESERVATION NOT FOUND");
-        if (reservationRepository.findById(reservationId).get().getUser().getUserId() != userId) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "UNAUTHORIZED");
-        if (reservation.getCheckInTime().after(reservation.getCheckOutTime())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "INVALID DATES");
-        Reservation r = reservationRepository.findById(reservationId).get();
-        r.setCheckInTime(reservation.getCheckInTime());
-        r.setCheckOutTime(reservation.getCheckOutTime());
+    public String editReservation(int userId, int reservationId, Reservation newReservation) {
+        Reservation r = reservationRepository.findById(reservationId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "RESERVATION NOT FOUND"));
+        if (r.getUser().getUserId() != userId) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "UNAUTHORIZED");
+        if (newReservation.getCheckInTime().after(newReservation.getCheckOutTime())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "INVALID DATES");
+
+        r.setCheckInTime(newReservation.getCheckInTime());
+        r.setCheckOutTime(newReservation.getCheckOutTime());
         reservationRepository.save(r);
         return "RESERVATION UPDATED";
     }
 
     public String deleteReservation(int userId, int reservationId) {
-        if (reservationRepository.existsById(reservationId)) {
-            if (reservationRepository.findById(reservationId).get().getUser().getUserId() != userId) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "UNAUTHORIZED");
-            }
-            reservationRepository.deleteById(reservationId);
-            return "RESERVATION DELETED";
+        Reservation r = reservationRepository.findById(reservationId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "RESERVATION NOT FOUND"));
+        if (r.getUser().getUserId() != userId) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "UNAUTHORIZED");
         }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "RESERVATION NOT FOUND");
+        reservationRepository.deleteById(reservationId);
+        return "RESERVATION DELETED";
     }
 
     /*
