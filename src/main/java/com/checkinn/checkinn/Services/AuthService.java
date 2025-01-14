@@ -113,9 +113,7 @@ public class AuthService {
      */
     public void isAdminThrowOtherwise(String token) {
         int userId = decodeToken(token);
-        User user = userRepository.findById(userId).orElseThrow(() -> {
-            return new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        });
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
         if (!user.getRole().isAdmin()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
@@ -137,23 +135,6 @@ public class AuthService {
     }
 
     /**
-     * Checks if the supplied password matches the token user's hashed password.
-     *
-     * @param token the JWT token to read
-     * @param password the password to check against
-     * @throws ResponseStatusException if the passwords don't match
-     */
-    public void passwordMatchesThrowOtherwise(String token, String password) {
-        int userId = decodeToken(token);
-        User user = userRepository.findById(userId).orElseThrow(() -> {
-            return new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        });
-        if (!BCrypt.checkpw(password, user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-    }
-
-    /**
      * Registers a new user and save them to the database.
      * The user's email must not already be registered.
      * The user's password will be securely hashed before storage.
@@ -171,7 +152,7 @@ public class AuthService {
 
         // User's email cannot already be registered
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT);
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "EMAIL ALREADY REGISTERED");
         }
 
         // Force email to be lowercase
@@ -197,11 +178,11 @@ public class AuthService {
      */
     public String loginUser(UserLoginDTO user) {
         User foundUser = userRepository.findByEmail(user.getEmail()).
-                orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+                orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "INVALID EMAIL OR PASSWORD"));
 
         // Password must match the hashed password
         if (!BCrypt.checkpw(user.getPassword(), foundUser.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "INVALID EMAIL OR PASSWORD");
         }
 
         return generateToken(foundUser);
@@ -216,14 +197,14 @@ public class AuthService {
      */
     public void editUserPassword(int userId, PasswordDTO passwordDTO) {
         // Data validation
-        if (!passwordDTO.getNewPassword().matches(PASSWORD_REGEX)) { throw new ResponseStatusException(HttpStatus.BAD_REQUEST); }
+        if (!passwordDTO.getNewPassword().matches(PASSWORD_REGEX)) { throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "PASSWORD DOES NOT MEET REQUIREMENTS"); }
 
         // User must exist
         User user = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
         // Password must match the hashed password
         if (!BCrypt.checkpw(passwordDTO.getOldPassword(), user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "INCORRECT PASSWORD");
         }
 
         user.setPassword(hashPassword(passwordDTO.getNewPassword()));
