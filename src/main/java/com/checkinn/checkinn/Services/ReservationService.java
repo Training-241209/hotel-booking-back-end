@@ -49,7 +49,7 @@ public class ReservationService {
         Reservation r = reservationRepository.findById(reservationId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "RESERVATION NOT FOUND"));
         if (r.getUser().getUserId() != userId) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "UNAUTHORIZED");
-        if (dateValidation(newReservation.getCheckInTime(), newReservation.getCheckOutTime())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "INVALID DATES");
+        if (!dateValidation(newReservation.getCheckInTime(), newReservation.getCheckOutTime())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "INVALID DATES");
 
         r.setCheckInTime(newReservation.getCheckInTime());
         r.setCheckOutTime(newReservation.getCheckOutTime());
@@ -67,13 +67,10 @@ public class ReservationService {
         return "RESERVATION DELETED";
     }
 
-    /*
-     *  better date validation to be added later
-     */
     public String createReservation(int userId, int hotelId, Reservation reservation) {
             if (!this.hotelRepository.existsById(hotelId)) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "HOTEL NOT FOUND");
             if (!dateValidation(reservation.getCheckInTime(), reservation.getCheckOutTime())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "INVALID DATES");
-            if (!(this.hotelRepository.findById(hotelId).get().getRooms() >= reservationRepository.findByHotel_HotelId(hotelId).size())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NO EMPTY ROOMS");
+            if (!(this.hotelRepository.findById(hotelId).get().getRooms() > reservationRepository.findByHotel_HotelId(hotelId).size())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NO EMPTY ROOMS");
             reservation.setHotel(this.hotelRepository.findById(hotelId).get());
             reservation.setUser(this.userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "USER NOT FOUND")));
             reservationRepository.save(reservation);
