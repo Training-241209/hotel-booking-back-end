@@ -31,15 +31,27 @@ public class ReservationService {
     }
 
     public Iterable<Reservation> getAllReservations() {
-        return this.reservationRepository.findAll();
+        Iterable<Reservation> reservations = this.reservationRepository.findAll();
+        for (Reservation r : reservations){
+            r.setUser(new User(r.getUser().getUserId(), r.getUser().getFirstName(), r.getUser().getLastName(), r.getUser().getEmail(), "", r.getUser().getRole()));
+        }
+        return reservations;
     }
 
     public Iterable<Reservation> getReservationsByUserId(int userId) {
-        return this.reservationRepository.findByUser_UserId(userId);
+        Iterable<Reservation> reservations = this.reservationRepository.findByUser_UserId(userId);
+        for (Reservation r : reservations){
+            r.setUser(new User(r.getUser().getUserId(), r.getUser().getFirstName(), r.getUser().getLastName(), r.getUser().getEmail(), "", r.getUser().getRole()));
+        }
+        return reservations;
     }
 
     public Iterable<Reservation> getReservationsByHotelId(int hotelId) {
-        return this.reservationRepository.findByHotel_HotelId(hotelId);
+        Iterable<Reservation> reservations = this.reservationRepository.findByHotel_HotelId(hotelId);
+        for (Reservation r : reservations){
+            r.setUser(new User(r.getUser().getUserId(), r.getUser().getFirstName(), r.getUser().getLastName(), r.getUser().getEmail(), "", r.getUser().getRole()));
+        }
+        return reservations;
     }
 
     /*
@@ -78,7 +90,9 @@ public class ReservationService {
     }
 
     public Reservation getReservationById(int reservationId) {
-        return reservationRepository.findById(reservationId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "RESERVATION NOT FOUND"));
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "RESERVATION NOT FOUND"));
+        reservation.setUser(new User(reservation.getUser().getUserId(), reservation.getUser().getFirstName(), reservation.getUser().getLastName(), reservation.getUser().getEmail(), "", reservation.getUser().getRole()));
+        return reservation;
     }
 
     public User getUserByReservationId(int reservationId) {
