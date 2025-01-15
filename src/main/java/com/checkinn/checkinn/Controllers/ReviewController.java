@@ -72,8 +72,8 @@ public class ReviewController {
 
     @DeleteMapping("/del/{reviewId}")
     public ResponseEntity<String> deleteReview(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int reviewId) {
-        int userId = this.authService.decodeToken(token);
-        return ResponseEntity.ok().body(reviewService.deleteReview(userId, reviewId));
+        authService.tokenMatchesUserThrowOtherwise(token, reviewService.getUserByReviewId(reviewId).getUserId());
+        return ResponseEntity.ok().body(reviewService.deleteReview(reviewId));
     }
 
 }

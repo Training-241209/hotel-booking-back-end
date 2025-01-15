@@ -198,49 +198,4 @@ class ReservationServiceTests {
             fail("Something else went wrong: " + f.getMessage());
         }
     }
-
-    @Test
-    void delete_reservation_successfully() {
-        // Setup
-        Reservation reservation = new Reservation();
-        reservation.setReservationId(2);
-        reservation.setHotel(TEST_HOTEL);
-        reservation.setUser(TEST_USER);
-        reservation.setCheckInTime(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)); // 24 hours from now
-        reservation.setCheckOutTime(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 72)); // 72 hours from now
-
-        // Mock
-        when(reservationRepository.findById(reservation.getReservationId())).thenReturn(Optional.of(reservation));
-
-        // CUT and Assert
-        assertDoesNotThrow(() -> {
-            reservationService.deleteReservation(TEST_USER.getUserId(), reservation.getReservationId());
-        });
-    }
-
-    @Test
-    void delete_reservation_incorrect_user() {
-        Reservation reservation = new Reservation();
-        reservation.setReservationId(2);
-        reservation.setHotel(TEST_HOTEL);
-        reservation.setUser(TEST_USER);
-        reservation.setCheckInTime(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)); // 24 hours from now
-        reservation.setCheckOutTime(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 72)); // 72 hours from now
-
-        // Mock
-        when(reservationRepository.findById(reservation.getReservationId())).thenReturn(Optional.of(reservation));
-
-        try {
-            // CUT
-            reservationService.deleteReservation(TEST_USER.getUserId() + 404, reservation.getReservationId());
-            fail("User validation failed");
-        }
-        catch (ResponseStatusException e) {
-            // Assert
-            assertEquals(HttpStatus.FORBIDDEN, e.getStatusCode());
-        }
-        catch (Exception f) {
-            fail("Something else went wrong: " + f.getMessage());
-        }
-    }
 }

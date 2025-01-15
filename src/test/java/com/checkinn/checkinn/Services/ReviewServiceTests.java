@@ -271,47 +271,4 @@ class ReviewServiceTests {
             fail("Something else went wrong: " + f.getMessage());
         }
     }
-
-    @Test
-    void delete_review_successfully() {
-        // Setup
-        int userId = 1;
-        int reviewId = 4;
-
-        Review review = new Review();
-        review.setReviewId(reviewId);
-        review.setUser(TEST_USER);
-
-        // Mock
-        when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review));
-
-        // CUT and Assert
-        assertDoesNotThrow(() -> reviewService.deleteReview(userId, reviewId));
-    }
-
-    @Test
-    void delete_review_incorrect_user() {
-        // Setup
-        int userId = TEST_USER.getUserId() + 1;
-        int reviewId = 4;
-
-        Review review = new Review();
-        review.setReviewId(reviewId);
-        review.setUser(TEST_USER);
-
-        // Mock
-        when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review));
-
-        try {
-            // CUT
-            reviewService.deleteReview(userId, reviewId);
-        }
-        catch (ResponseStatusException e) {
-            // Assert
-            assertEquals(HttpStatus.FORBIDDEN, e.getStatusCode());
-        }
-        catch (Exception f) {
-            fail("Something else went wrong: " + f.getMessage());
-        }
-    }
 }

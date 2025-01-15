@@ -2,6 +2,7 @@ package com.checkinn.checkinn.Services;
 
 import java.util.Optional;
 
+import com.checkinn.checkinn.Entities.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,12 @@ public class ReviewService {
         return reviews;   
     }
 
+    public User getUserByReviewId(int reviewId) {
+        Review review = reviewRepository.findById(reviewId).orElse(null);
+        if (review == null) { return null; }
+        return review.getUser();
+    }
+
     public String createReview(User user, Review review) {
         if (!review.getTitle().isBlank() && !review.getDescription().isBlank() && review.getRating()>=1 && review.getRating()<=5 && this.hotelRepository.existsById(review.getHotel().getHotelId())) {
             review.setUser(user);
@@ -58,12 +65,7 @@ public class ReviewService {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "INVALID REVIEW INFORMATION");
     }
 
-    public String deleteReview(int userId, int reviewId) {
-        Review review = reviewRepository.findById(reviewId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "HOTEL NOT FOUND"));
-        if (review.getUser().getUserId() != userId) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "UNAUTHORIZED");
-        }
+    public String deleteReview(int reviewId) {
         reviewRepository.deleteById(reviewId);
         return "REVIEW DELETED";
     }
