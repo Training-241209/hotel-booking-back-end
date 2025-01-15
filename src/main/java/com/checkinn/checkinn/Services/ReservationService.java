@@ -69,12 +69,7 @@ public class ReservationService {
         return "RESERVATION UPDATED";
     }
 
-    public String deleteReservation(int userId, int reservationId) {
-        Reservation r = reservationRepository.findById(reservationId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "RESERVATION NOT FOUND"));
-        if (r.getUser().getUserId() != userId) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "UNAUTHORIZED");
-        }
+    public String deleteReservation(int reservationId) {
         reservationRepository.deleteById(reservationId);
         return "RESERVATION DELETED";
     }
