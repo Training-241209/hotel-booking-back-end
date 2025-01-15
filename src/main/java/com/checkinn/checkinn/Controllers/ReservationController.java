@@ -63,8 +63,8 @@ public class ReservationController {
 
     @PatchMapping("/edit/{reservationId}")
     public ResponseEntity<String> editReservation(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int reservationId, @RequestBody Reservation reservation) {
-        int userId = this.authService.decodeToken(token);
-        return ResponseEntity.ok().body(reservationService.editReservation(userId, reservationId, reservation));
+        authService.tokenMatchesUserThrowOtherwise(token, reservationService.getUserByReservationId(reservationId).getUserId());
+        return ResponseEntity.ok().body(reservationService.editReservation(reservationId, reservation));
     }
 
     @PostMapping("/create/{hotelId}")

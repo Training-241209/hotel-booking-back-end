@@ -133,7 +133,7 @@ class ReservationServiceTests {
 
         // CUT and Assert
         assertDoesNotThrow(() -> {
-            reservationService.editReservation(TEST_USER.getUserId(),oldReservation.getReservationId(), newReservation);
+            reservationService.editReservation(oldReservation.getReservationId(), newReservation);
         });
     }
 
@@ -156,43 +156,12 @@ class ReservationServiceTests {
 
         try {
         // CUT
-            reservationService.editReservation(TEST_USER.getUserId(), oldReservation.getReservationId(), newReservation);
+            reservationService.editReservation(oldReservation.getReservationId(), newReservation);
             fail("Time validation failed");
         }
         catch (ResponseStatusException e) {
         // Assert
             assertEquals(HttpStatus.BAD_REQUEST, e.getStatusCode());
-        }
-        catch (Exception f) {
-            fail("Something else went wrong: " + f.getMessage());
-        }
-    }
-
-    @Test
-    void edit_reservation_incorrect_user() {
-        // Setup
-        Reservation oldReservation = new Reservation();
-        oldReservation.setReservationId(2);
-        oldReservation.setHotel(TEST_HOTEL);
-        oldReservation.setUser(TEST_USER);
-        oldReservation.setCheckInTime(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)); // 24 hours from now
-        oldReservation.setCheckOutTime(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 72)); // 72 hours from now
-
-        Reservation newReservation = new Reservation();
-        newReservation.setCheckInTime(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 48)); // 48 hours from now
-        newReservation.setCheckOutTime(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 96)); // 96 hours from now
-
-        // Mock
-        when(reservationRepository.findById(oldReservation.getReservationId())).thenReturn(Optional.of(oldReservation));
-
-        try {
-            // CUT
-            reservationService.editReservation(TEST_USER.getUserId() + 404, oldReservation.getReservationId(), newReservation);
-            fail("User validation failed");
-        }
-        catch (ResponseStatusException e) {
-            // Assert
-            assertEquals(HttpStatus.FORBIDDEN, e.getStatusCode());
         }
         catch (Exception f) {
             fail("Something else went wrong: " + f.getMessage());

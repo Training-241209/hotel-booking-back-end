@@ -57,10 +57,9 @@ public class ReservationService {
     /*
      *  better date validation to be added later
      */
-    public String editReservation(int userId, int reservationId, Reservation newReservation) {
+    public String editReservation(int reservationId, Reservation newReservation) {
         Reservation r = reservationRepository.findById(reservationId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "RESERVATION NOT FOUND"));
-        if (r.getUser().getUserId() != userId) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "UNAUTHORIZED");
         if (!dateValidation(newReservation.getCheckInTime(), newReservation.getCheckOutTime())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "INVALID DATES");
 
         r.setCheckInTime(newReservation.getCheckInTime());

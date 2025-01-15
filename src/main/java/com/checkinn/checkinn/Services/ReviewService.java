@@ -70,13 +70,10 @@ public class ReviewService {
         return "REVIEW DELETED";
     }
 
-    public String editReview(int userId, int reviewId, Review review) {
+    public String editReview(int reviewId, Review review) {
         Optional<Review> resp = reviewRepository.findById(reviewId);
         if (resp.isPresent()){
             Review r = resp.get();
-            if (r.getUser().getUserId() != userId) {
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "UNAUTHORIZED");
-            }
             if (review.getDescription().isBlank()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "INVALID REVIEW INFORMATION");
             if (review.getRating()<1 || review.getRating()>5) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "INVALID REVIEW INFORMATION");
             if (review.getTitle().isBlank()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "INVALID REVIEW INFORMATION");
