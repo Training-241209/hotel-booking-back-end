@@ -98,44 +98,7 @@ class ReviewServiceTests {
         when(reviewRepository.findById(review.getReviewId())).thenReturn(Optional.of(review));
 
         // CUT
-        reviewService.editReview(TEST_USER.getUserId(), review.getReviewId(), newReview);
-    }
-
-    @Test
-    void edit_review_incorrect_user() {
-
-        // Setup
-        Review review = new Review();
-        review.setReviewId(2);
-        review.setUser(TEST_USER);
-        review.setHotel(TEST_HOTEL);
-        review.setTitle("Old Title");
-        review.setRating(5);
-        review.setDescription("Old Description");
-
-        Review newReview = new Review();
-        newReview.setReviewId(2);
-        newReview.setUser(TEST_USER);
-        newReview.setHotel(TEST_HOTEL);
-        newReview.setTitle("New Title");
-        newReview.setRating(4);
-        newReview.setDescription("New Description");
-
-        // Mock
-        when(reviewRepository.findById(review.getReviewId())).thenReturn(Optional.of(review));
-
-        try {
-        // CUT
-            reviewService.editReview(TEST_USER.getUserId() + 404, review.getReviewId(), newReview);
-            fail("How did this succeed");
-        }
-        catch (ResponseStatusException e) {
-        // Assert
-            assertEquals(HttpStatus.FORBIDDEN, e.getStatusCode());
-        }
-        catch (Exception f) {
-            fail("Something else went wrong: " + f.getMessage());
-        }
+        reviewService.editReview(review.getReviewId(), newReview);
     }
 
     @Test
@@ -147,7 +110,7 @@ class ReviewServiceTests {
 
         try {
             // CUT
-            reviewService.editReview(TEST_USER.getUserId(), reviewId, new Review());
+            reviewService.editReview(reviewId, new Review());
             fail("How did this succeed");
         }
         catch (ResponseStatusException e) {
@@ -185,7 +148,7 @@ class ReviewServiceTests {
 
         try {
             // CUT
-            reviewService.editReview(TEST_USER.getUserId(), review.getReviewId(), newReview);
+            reviewService.editReview(review.getReviewId(), newReview);
             fail("How did this succeed");
         }
         catch (ResponseStatusException e) {
@@ -222,7 +185,7 @@ class ReviewServiceTests {
 
         try {
             // CUT
-            reviewService.editReview(TEST_USER.getUserId(), review.getReviewId(), newReview);
+            reviewService.editReview(review.getReviewId(), newReview);
             fail("How did this succeed");
         }
         catch (ResponseStatusException e) {
@@ -260,7 +223,7 @@ class ReviewServiceTests {
 
         try {
             // CUT
-            reviewService.editReview(TEST_USER.getUserId(), review.getReviewId(), newReview);
+            reviewService.editReview(review.getReviewId(), newReview);
             fail("How did this succeed");
         }
         catch (ResponseStatusException e) {
