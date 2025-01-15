@@ -26,15 +26,27 @@ public class ReviewService {
     }
 
     public Iterable<Review> getAllReviews() {
-        return this.reviewRepository.findAll();
+        Iterable<Review> reviews = this.reviewRepository.findAll();
+        for (Review r: reviews){
+            r.setUser(new User(r.getUser().getUserId(), r.getUser().getFirstName(), r.getUser().getLastName(), r.getUser().getEmail(), "", r.getUser().getRole()));
+        }
+        return reviews;
     }
 
     public Iterable<Review> getReviewsByHotelId(int hotelId) {
-        return this.reviewRepository.findByHotel_HotelId(hotelId);
+        Iterable<Review> reviews = this.reviewRepository.findByHotel_HotelId(hotelId);
+        for (Review r: reviews){
+            r.setUser(new User(r.getUser().getUserId(), r.getUser().getFirstName(), r.getUser().getLastName(), r.getUser().getEmail(), "", r.getUser().getRole()));
+        }
+        return reviews;
     }
 
     public Iterable<Review> getReviewsByUserId(int userId) {
-        return this.reviewRepository.findByUser_UserId(userId);
+        Iterable<Review> reviews = this.reviewRepository.findByUser_UserId(userId);
+        for (Review r: reviews){
+            r.setUser(new User(r.getUser().getUserId(), r.getUser().getFirstName(), r.getUser().getLastName(), r.getUser().getEmail(), "", r.getUser().getRole()));
+        }
+        return reviews;   
     }
 
     public String createReview(User user, Review review) {
