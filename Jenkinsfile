@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        DOCKER_IMAGE = "checkinn-app"
+        DOCKER_IMAGE = "checkinn-backend"
 		DOCKER_TAG = "${BUILD_NUMBER}"
 		DB_CREDS = credentials("DB_CREDENTIALS")
 		JWT_SECRET = credentials("JWT_SECRET")
