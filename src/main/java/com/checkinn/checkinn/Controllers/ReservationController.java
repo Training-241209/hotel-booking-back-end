@@ -1,5 +1,6 @@
 package com.checkinn.checkinn.Controllers;
 
+import com.checkinn.checkinn.Entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -63,7 +64,8 @@ public class ReservationController {
 
     @PatchMapping("/edit/{reservationId}")
     public ResponseEntity<String> editReservation(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int reservationId, @RequestBody Reservation reservation) {
-        authService.tokenMatchesUserThrowOtherwise(token, reservationService.getUserByReservationId(reservationId).getUserId());
+        User user = reservationService.getUserByReservationId(reservationId);
+        authService.tokenMatchesUserThrowOtherwise(token, user != null ? user.getUserId() : -1);
         return ResponseEntity.ok().body(reservationService.editReservation(reservationId, reservation));
     }
 
@@ -75,7 +77,8 @@ public class ReservationController {
 
     @DeleteMapping("/del/{reservationId}")
     public ResponseEntity<String> deleteReservation(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int reservationId) {
-        authService.tokenMatchesUserThrowOtherwise(token, reservationService.getUserByReservationId(reservationId).getUserId());
+        User user = reservationService.getUserByReservationId(reservationId);
+        authService.tokenMatchesUserThrowOtherwise(token, user != null ? user.getUserId() : -1);
         return ResponseEntity.ok().body(this.reservationService.deleteReservation(reservationId));
     }
 }
