@@ -101,7 +101,7 @@ public class AuthService {
     public boolean isAdmin(String token) {
         int userId = decodeToken(token);
         User user = userRepository.findById(userId).orElse(null);
-        return (user == null || !user.getRole().isAdmin());
+        return !(user == null || !user.getRole().isAdmin());
     }
 
     /**
