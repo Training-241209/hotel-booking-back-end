@@ -59,7 +59,8 @@ public class ReviewController {
 
     @PatchMapping("/edit/{reviewId}")
     public ResponseEntity<String> editReview(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int reviewId, @RequestBody Review review) {
-        authService.tokenMatchesUserThrowOtherwise(token, reviewService.getUserByReviewId(reviewId).getUserId());
+        User user = reviewService.getUserByReviewId(reviewId);
+        authService.tokenMatchesUserThrowOtherwise(token, user != null ? user.getUserId() : -1);
         int userId = this.authService.decodeToken(token);
         return ResponseEntity.ok().body(reviewService.editReview(userId, review));
     }
@@ -73,7 +74,8 @@ public class ReviewController {
 
     @DeleteMapping("/del/{reviewId}")
     public ResponseEntity<String> deleteReview(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int reviewId) {
-        authService.tokenMatchesUserThrowOtherwise(token, reviewService.getUserByReviewId(reviewId).getUserId());
+        User user = reviewService.getUserByReviewId(reviewId);
+        authService.tokenMatchesUserThrowOtherwise(token, user != null ? user.getUserId() : -1);
         return ResponseEntity.ok().body(reviewService.deleteReview(reviewId));
     }
 
