@@ -40,7 +40,7 @@ public class HotelService {
         return hotelRepository.findByLocation(location);
     }
 
-    public String editHotel(int hotel_id, Hotel hotel) {
+    public Hotel editHotel(int hotel_id, Hotel hotel) {
         Optional<Hotel> resp = hotelRepository.findById(hotel_id);
         if (resp.isPresent()) {
             Hotel hotelToUpdate = resp.get();
@@ -50,8 +50,7 @@ public class HotelService {
             hotelToUpdate.setLocation(hotel.getLocation());
             hotelToUpdate.setPrice(hotel.getPrice());
             hotelToUpdate.setImage(hotel.getImage());
-            hotelRepository.save(hotelToUpdate);
-            return "HOTEL UPDATED";
+            return hotelRepository.save(hotelToUpdate);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "HOTEL NOT FOUND");
     }

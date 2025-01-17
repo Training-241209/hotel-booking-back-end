@@ -77,7 +77,7 @@ public class HotelController {
      * @return a ResponseEntity containing a success message
      */
     @PatchMapping("/edit/{hotel_id}")
-    public ResponseEntity<String> editHotel(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int hotel_id, @RequestBody Hotel hotel) {
+    public ResponseEntity<Hotel> editHotel(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int hotel_id, @RequestBody Hotel hotel) {
         authService.isAdminThrowOtherwise(token);
         return ResponseEntity.ok().body(hotelService.editHotel(hotel_id, hotel));
     }
