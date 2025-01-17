@@ -61,8 +61,7 @@ public class ReviewController {
     public ResponseEntity<String> editReview(@RequestHeader (GeneralConstants.AUTH_HEADER_NAME) String token, @PathVariable int reviewId, @RequestBody Review review) {
         User user = reviewService.getUserByReviewId(reviewId);
         authService.tokenMatchesUserThrowOtherwise(token, user != null ? user.getUserId() : -1);
-        int userId = this.authService.decodeToken(token);
-        return ResponseEntity.ok().body(reviewService.editReview(userId, review));
+        return ResponseEntity.ok().body(reviewService.editReview(reviewId, review));
     }
 
     @PostMapping("/create")
