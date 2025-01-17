@@ -11,4 +11,8 @@ public interface ReservationRepository extends CrudRepository<Reservation, Integ
     Iterable<Reservation> findByUser_UserId(int userId);
 
     List<Reservation> findByHotel_HotelId(int hotelId);
+
+    void deleteByHotel_HotelId(int hotel_id);
+
+    void deleteByUser_UserId(int userId);
 }

@@ -9,15 +9,25 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.checkinn.checkinn.Entities.Hotel;
 import com.checkinn.checkinn.Repositories.HotelRepository;
+import com.checkinn.checkinn.Repositories.ReservationRepository;
+import com.checkinn.checkinn.Repositories.ReviewRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class HotelService {
 
     private HotelRepository hotelRepository;
 
+    private ReviewRepository reviewRepository;
+
+    private ReservationRepository reservationRepository;
+
     @Autowired
-    public HotelService(HotelRepository hotelRepository) {
+    public HotelService(HotelRepository hotelRepository, ReviewRepository reviewRepository, ReservationRepository reservationRepository) {
         this.hotelRepository = hotelRepository;
+        this.reviewRepository = reviewRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     public Hotel getHotelById(int hotel_id) { return hotelRepository.findById(hotel_id).orElse(null); }
@@ -55,7 +65,10 @@ public class HotelService {
         
     }
 
+    @Transactional
     public String deleteHotel(int hotel_id) {
+        reviewRepository.deleteByHotel_HotelId(hotel_id);
+        reservationRepository.deleteByHotel_HotelId(hotel_id);
         hotelRepository.deleteById(hotel_id);
         return "HOTEL DELETED";
     }
