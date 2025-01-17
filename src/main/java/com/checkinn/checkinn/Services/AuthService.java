@@ -66,7 +66,7 @@ public class AuthService {
                 .claim("roleName", user.getRole().getRoleName())
                 .claim("isAdmin", user.getRole().isAdmin())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15)) // 15 minutes
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) // 30 minutes
                 .signWith(getSigningKey())
                 .compact();
     }
