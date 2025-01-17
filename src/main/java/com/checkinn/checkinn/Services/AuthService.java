@@ -151,7 +151,7 @@ public class AuthService {
         if (!user.getPassword().matches(PASSWORD_REGEX)) { throw new ResponseStatusException(HttpStatus.BAD_REQUEST); }
 
         // User's email cannot already be registered
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(user.getEmail().toLowerCase()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "EMAIL ALREADY REGISTERED");
         }
 
@@ -177,7 +177,7 @@ public class AuthService {
      * @throws ResponseStatusException if the user's email is not found or the password is incorrect
      */
     public String loginUser(UserLoginDTO user) {
-        User foundUser = userRepository.findByEmail(user.getEmail()).
+        User foundUser = userRepository.findByEmail(user.getEmail().toLowerCase()).
                 orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "INVALID EMAIL OR PASSWORD"));
 
         // Password must match the hashed password
