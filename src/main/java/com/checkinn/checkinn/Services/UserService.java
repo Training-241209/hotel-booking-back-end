@@ -2,7 +2,12 @@ package com.checkinn.checkinn.Services;
 
 import com.checkinn.checkinn.DTOs.UserDetailsDTO;
 import com.checkinn.checkinn.Entities.User;
+import com.checkinn.checkinn.Repositories.ReservationRepository;
+import com.checkinn.checkinn.Repositories.ReviewRepository;
 import com.checkinn.checkinn.Repositories.UserRepository;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,9 +20,15 @@ public class UserService {
 
     private UserRepository userRepository;
 
+    private ReviewRepository reviewRepository;
+
+    private ReservationRepository reservationRepository;
+
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, ReviewRepository reviewRepository, ReservationRepository reservationRepository) {
         this.userRepository = userRepository;
+        this.reviewRepository = reviewRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     public User getUserById(int userId) {
@@ -45,7 +56,10 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
     public void deleteUser(int userId) {
+        this.reservationRepository.deleteByUser_UserId(userId);
+        this.reviewRepository.deleteByUser_UserId(userId);
         userRepository.deleteById(userId);
     }
 }
