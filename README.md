@@ -49,7 +49,6 @@ We are tasked with creating full stack hotel management web application. Users w
 ### Dev Ops
 - AWS EC2
 - AWS RDS
-- Postgres
 - Docker
 - Jenkins
 
